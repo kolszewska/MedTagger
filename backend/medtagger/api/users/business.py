@@ -19,11 +19,11 @@ def set_user_role(user_id: int, role_name: str) -> None:
     RolesRepository.set_user_role(user_id, role_name)
 
 
-def set_user_info(user_id: int, firstName: str, lastName: str) -> None:
+def set_user_info(user_id: int, first_name: str, last_name: str) -> None:
     """Set user's information."""
     try:
         user = UsersRepository.get_user_by_id(user_id)
-        UsersRepository.set_user_info(user, firstName, lastName)
+        UsersRepository.set_user_info(user, first_name, last_name)
     except NoResultFound:
         raise InvalidArgumentsException('User with this id does not exist.')
 

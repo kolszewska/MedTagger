@@ -30,8 +30,9 @@ configuration = config.AppConfiguration()
 websocket_ping_timeout = configuration.getint('api', 'websocket_ping_timeout', fallback=5)
 websocket_ping_interval = configuration.getint('api', 'websocket_ping_interval', fallback=3)
 web_socket = SocketIO(logger=True, engineio_logger=True, ping_timeout=websocket_ping_timeout,
-                      ping_interval=websocket_ping_interval)
+                      ping_interval=websocket_ping_interval, cors_allowed_origins='*')
 
+UNHANDLED_EXCEPTION_MESSAGE = 'An unhandled exception occurred.'
 
 def setup_connection_to_sql_and_storage() -> None:
     """Initialize connection to the SQL DB and Storage."""
@@ -58,7 +59,7 @@ def rest_default_error_handler(exception: Exception) -> Tuple[Dict, int]:  # pyl
     :return: tuple with response and status code
     """
     logger.error(traceback.format_exc())
-    return {'message': 'An unhandled exception occurred.'}, 500
+    return {'message': UNHANDLED_EXCEPTION_MESSAGE}, 500
 
 
 @api.errorhandler(UnauthorizedException)
@@ -115,5 +116,5 @@ def web_socket_default_error_handler(exception: Exception) -> None:  # pylint: d
 
     :param exception: Python Exception
     """
-    logger.exception('An unhandled exception occurred.')
-    emit('error', {'message': 'An unhandled exception occurred.'})
+    logger.exception(UNHANDLED_EXCEPTION_MESSAGE)
+    emit('error', {'message': UNHANDLED_EXCEPTION_MESSAGE})
